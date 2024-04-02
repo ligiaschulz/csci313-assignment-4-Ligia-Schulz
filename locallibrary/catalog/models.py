@@ -2,6 +2,8 @@ from django.db import models
 from django.urls import reverse
 from django.db.models.functions import Lower
 import uuid
+from django.conf import settings
+from datetime import date
 
 class Genre(models.Model):
     name = models.CharField(
@@ -29,6 +31,8 @@ class Book(models.Model):
                             help_text="13 character <a href='https://www.isbn-international.org/content/what-isbn'>ISBN number </a>")
     genre = models.ManyToManyField(Genre, help_text='Select a genre for this book')
 
+    def is_overdue(self):
+        return bool(self.due_back and date.today() > self.due_back)
     def __str__(self):
         return self.title
     
@@ -51,9 +55,11 @@ class BookInstance(models.Model):
 
     status = models.CharField(max_length=1, choices=LOAN_STATUS, blank=True, default='m', help_text='Book availability')
     language = models.CharField(max_length=100, blank=True, null=True, help_text='Language this particular book is written in')
+    borrower = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
 
     class Meta:
         ordering=['due_back']
+        permissions = (("can_mark_returned", "Set book as returned"),)
 
     def __str__(self):
         return f'{self.id} ({self.book.title})'
