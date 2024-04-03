@@ -25,6 +25,12 @@
       <p><strong>Imprint:</strong> {{ copy.imprint }}</p>
       <p><strong>Language:</strong> {{ copy.language }}</p>
       <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
+      {% if perms.catalog.change_bookinstance %}
+      <p><a href="{% url 'bookinstance-update' copy.id %}">Update Copy</a></p>
+      {% endif %}
+      {% if perms.catalog.delete_bookinstance %}
+      <p><a href="{% url 'bookinstance-delete' copy.id %}">Delete Copy</a></p>
+      {% endif %}
     {% endfor %}
   </div>
 {% endblock %}
@@ -39,6 +45,9 @@
     {% endif %}
     {% if not book.bookinstance_set.all and perms.catalog.delete_book %}
       <li><a href="{% url 'book-delete' book.id %}">Delete Book</a></li>
+    {% endif %}
+    {% if perms.catalog.add_bookinstance %}
+      <li><a href="{% url 'bookinstance-create' %}">Create Copy</a></li>
     {% endif %}
     </ul>
   {% endif %}
