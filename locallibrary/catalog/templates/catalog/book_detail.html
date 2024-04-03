@@ -9,6 +9,19 @@
   <p><strong>Summary:</strong> {{ book.summary }}</p>
   <p><strong>ISBN:</strong> {{ book.isbn }}</p>
   <p><strong>Genre:</strong> {{ book.genre.all|join:", " }}</p>
+  {% if perms.catalog.change_book or perms.catalog.delete_book or perms.catalog.add_bookinstance %}
+  <p>
+    {% if perms.catalog.change_book %}
+      <a class="btn btn-primary" href="{% url 'book-update' book.id %}">Update Book</a>
+    {% endif %}
+    {% if not book.bookinstance_set.all and perms.catalog.delete_book %}
+      <a class="btn btn-danger" href="{% url 'book-delete' book.id %}">Delete Book</a>
+    {% endif %}
+    {% if perms.catalog.add_bookinstance %}
+      <a class="btn btn-secondary" href="{% url 'bookinstance-create' %}">Create Copy</a>
+    {% endif %}
+  </p>
+  {% endif %}
 
   <div style="margin-left:20px;margin-top:20px">
     <h4>Copies</h4>
@@ -33,20 +46,4 @@
       {% endif %}
     {% endfor %}
   </div>
-{% endblock %}
-{% block sidebar %}
-  {{ block.super }}
-
-  {% if perms.catalog.change_book or perms.catalog.delete_book %}
-    {% if perms.catalog.change_book %}
-      <li class="nav-item"><a class="nav-link" href="{% url 'book-update' book.id %}">Update Book</a></li>
-    {% endif %}
-    {% if not book.bookinstance_set.all and perms.catalog.delete_book %}
-      <li class="nav-item"><a class="nav-link" href="{% url 'book-delete' book.id %}">Delete Book</a></li>
-    {% endif %}
-    {% if perms.catalog.add_bookinstance %}
-      <li class="nav-item"><a class="nav-link" href="{% url 'bookinstance-create' %}">Create Copy</a></li>
-    {% endif %}
-  {% endif %}
-
 {% endblock %}

@@ -25,12 +25,6 @@
                 {% if perms.catalog.can_mark_returned %}
                 <li class="nav-item"><a class="nav-link" href="{% url 'all-borrowed' %}">All Borrowed</a></li>
                 {% endif %}
-                {% if perms.catalog.add_author %}
-                <li class="nav-item"><a class="nav-link" href="{% url 'author-create' %}">Create Author</a></li>
-                {% endif %}
-                {% if perms.catalog.add_book %}
-                <li class="nav-item"><a class="nav-link" href="{% url 'book-create' %}">Create Book</a></li>
-              {% endif %} 
               {% if user.is_authenticated %}
               <li class="nav-item"><a class="nav-link" href="{% url 'my-borrowed' %}">My Borrowed</a></li>
             {% else %}
