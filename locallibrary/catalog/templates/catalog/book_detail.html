@@ -38,18 +38,15 @@
   {{ block.super }}
 
   {% if perms.catalog.change_book or perms.catalog.delete_book %}
-  <hr>
-  <ul class="sidebar-nav">
     {% if perms.catalog.change_book %}
-      <li><a href="{% url 'book-update' book.id %}">Update Book</a></li>
+      <li class="nav-item"><a class="nav-link" href="{% url 'book-update' book.id %}">Update Book</a></li>
     {% endif %}
     {% if not book.bookinstance_set.all and perms.catalog.delete_book %}
-      <li><a href="{% url 'book-delete' book.id %}">Delete Book</a></li>
+      <li class="nav-item"><a class="nav-link" href="{% url 'book-delete' book.id %}">Delete Book</a></li>
     {% endif %}
     {% if perms.catalog.add_bookinstance %}
-      <li><a href="{% url 'bookinstance-create' %}">Create Copy</a></li>
+      <li class="nav-item"><a class="nav-link" href="{% url 'bookinstance-create' %}">Create Copy</a></li>
     {% endif %}
-    </ul>
   {% endif %}
 
 {% endblock %}
